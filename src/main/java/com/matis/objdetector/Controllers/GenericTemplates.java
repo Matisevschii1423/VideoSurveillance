@@ -9,6 +9,7 @@ public class GenericTemplates {
 
     @RequestMapping(value = "/main")
     public ModelAndView mainTemplate(){
+
         ModelAndView model = new ModelAndView("main");
         return model;
     }
