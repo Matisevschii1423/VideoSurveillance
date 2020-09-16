@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head >
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title of the document</title>
+</head>
+<body class="bg-secondary">
+
+
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark ml-2 mr-2 mt-2 rounded">
+
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="#">My project</a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/channels">Channels</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/streams">Streams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Parameters</a>
+            </li>
+        </ul>
+        <!-- Links -->
+
+    </div>
+    <!-- Collapsible content -->
+</nav>
+<!--/.Navbar-->
+<div class="container-fluid">
+    <div class="row rounded mt-2 ml-2 mr-2">
+        <div id="channelSelector" class="col-sm-12 col-md-12 col-lg-12 btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-dark active">
+                <input type="radio" name="options" id="b1" value="1" checked> 1
+            </label>
+            <label class="btn btn-dark">
+                <input type="radio" name="options" id="b2" value="2"> 2
+            </label>
+            <label class="btn btn-dark">
+                <input type="radio" name="options" id="b3" value="3"> 3
+            </label>
+            <label class="btn btn-dark">
+                <input type="radio" name="options" id="b4" value="4"> 4
+            </label>
+            <label class="btn btn-dark">
+                <input type="radio" name="options" id="b5" value="5"> 5
+            </label>
+            <label class="btn btn-dark">
+                <input type="radio" name="options" id="b6" value="6"> 6
+            </label>
+            <label class="btn btn-dark">
+                <input type="radio" name="options" id="b7" value="7"> 7
+            </label>
+            <label class="btn btn-dark">
+                <input type="radio" name="options" id="b8" value="8"> 8
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" id="channelsForms">
+    <div class="row">
+        <div th:each="channel: ${channelsForm}" class="col-lg-6 col-md-6 col-sm-12 ml-2 mt-2 mr-2 bg-dark card-body rounded d-none" th:id="${channel.data.getChannelNr()}" >
+            <form th:action="@{/streams/}+${channel.data.getChannelNr()}" method="post" >
+                <div class="form-group row" >
+                    <label  class="col-sm-2 col-form-label text-light">Channel number</label>
+                    <div class="col-sm-4">
+                        <input name="channelNumber" class="form-control"   th:value="${channel.data.getChannelNr()}" readonly="readonly"></input>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-light">Channel Name</label>
+                    <div class="col-sm-4">
+                        <input name="name" class="form-control" th:value="${channel.data.getName()}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label  class="col-sm-2 col-form-label text-light">Main Stream</label>
+                    <div class="col-sm-10">
+                        <input name="mainStream" class="form-control" th:value="${channel.data.getMainStreamData().getInput()}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label text-light">Sub Stream</label>
+                    <div class="col-sm-10">
+                        <input name="subStream" class="form-control" th:value="${channel.data.getSubStreamData().getInput()}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2 text-light">Enable Main Stream</div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input name="mainStreamEnable" class="form-check-input" type="checkbox"  th:checked="${channel.data.getMainStreamData().getEnable()}">
+                            <label class="form-check-label" th:text="${channel.getMainStream().state.getRunning()}">
+                                Example checkbox
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-2 text-light">Enable Sub Stream</div>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input name="subStreamEnable" class="form-check-input" type="checkbox" th:checked="${channel.data.getSubStreamData().getEnable()}">
+                            <label class="form-check-label" th:text="${channel.getSubStream().state.getRunning()}">
+                                Example checkbox
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Apply settings</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="webjars/jquery/1.9.1/jquery.min.js"></script>
+<script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="scripts/streams.js"></script>
+<!--<script src="libs/js/adapter.min.js"></script>-->
+<!--<script src="libs/js/web_socket.min.js"></script>-->
+<!--<script src="libs/js/janus.js"></script>-->
+<!--<script src="scripts/main.js"></script>-->
+
+</body>
+</html>
