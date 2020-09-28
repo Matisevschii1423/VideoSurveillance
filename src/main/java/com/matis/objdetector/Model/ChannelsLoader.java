@@ -12,15 +12,16 @@ import org.springframework.stereotype.Component;
 public class ChannelsLoader {
 
     private Logger logger = LoggerFactory.getLogger(ChannelsLoader.class);
-    @Autowired
-    private ChannelsContainer channelsContainer;
+
+    public static ChannelsContainer channelsContainer;
 
     public ChannelsLoader() {
+        channelsContainer = new ChannelsContainer();
 
     }
 
     @EventListener(ApplicationReadyEvent.class)
-    public void runChannels() {
+    public  void runChannels() {
         this.channelsContainer.serializationFile = "channels_config.bin";
         this.channelsContainer.restoreParameters();
         this.channelsContainer.executeAllChannels();

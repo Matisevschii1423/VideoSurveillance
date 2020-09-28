@@ -7,47 +7,11 @@ var opaqueId = "raztot-" + Janus.randomString(12);
 
 var bitrateTimer = null;
 var spinner = null;
-var selectedStream;
+var selectedStream = 102;
 var channel;
 var stream;
 
 var simulcastStarted = false, svcStarted = false;
-
-$('#channelSelector').on('click','input',function(event) {
-    selectedStream = event.target.id +findStream()
-    console.log('ch_event selectedStream--->'+selectedStream)
-    changeStream(selectedStream)
-});
-$('#streamSelector').on('click','input',function(event) {
-    selectedStream = findchannel() + event.target.id
-    console.log('stream_event selectedStream--->'+selectedStream)
-    changeStream(selectedStream)
-});
-
-function findchannel(){
-    return $('#channelSelector').find('.active').find('input').attr('id');
-}
-function findStream(){
-    return $('#streamSelector').find('.active').find('input').attr('id');
-}
-
-function changeStream(streamId){
-    stopStream();
-    startStream();
-}
-
-function getQuality(){
-    if ($('#H').parent().hasClass('active')){
-        console.log('H is true')
-        return 1
-    }
-    if ($('#L').parent().hasClass('active')){
-        console.log('L is true')
-        return 2
-    }
-}
-
-
 
 function startStream() {
     if (streaming != null){
@@ -212,8 +176,55 @@ function startJanus(callback) {
     });
 }
 
+
+function onSucces(){
+    alert("data sended ");
+}
+function onError(){
+    alert("data not sended ")
+}
+
+function sendData(url,data){
+    $.ajax({
+        type: 'PUT',
+        url: url,
+        data: JSON.stringify({"value":data}),
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function(){alert("succes");},
+        error:onError
+    });
+}
+
+function getData(url,data){
+    $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        contentType: 'application/json',
+        success: onSucces,
+        error:onError
+    });
+
+}
+
+$(function(){
+    $("#parameters .dropdown .dropdown-menu a").click(function(){
+        var dropdown_item = $(this);
+        var label = dropdown_item.parent().parent().parent().parent().find("div label");
+        label.text(dropdown_item.text())
+        label.attr("value",dropdown_item.attr("value"));
+        var url = "/channels/"+$("#ch_id").attr("value")+label.attr("href");
+        if (label.attr('id')!="ch_id"){
+            sendData(url,label.attr("value"));
+        }
+    });
+});
+
+
+
+
 $(document).ready(function(){
-    selectedStream = findchannel() +findStream()
     startJanus();
 	startStream();
 });

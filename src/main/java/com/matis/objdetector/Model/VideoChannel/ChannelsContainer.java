@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -24,7 +25,7 @@ public class ChannelsContainer {
 
     public ChannelsContainer() {
         this.channels = new HashMap<>();
-        this.scheduledExecutorService = Executors.newScheduledThreadPool(8);
+        this.scheduledExecutorService = Executors.newScheduledThreadPool(8,this.getFactory());
         this.tempId = new ArrayList<>();
     }
 
@@ -37,6 +38,18 @@ public class ChannelsContainer {
                 }
             }
         }
+    }
+
+    private ThreadFactory getFactory() {
+        ThreadFactory factory = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread t = new Thread(r);
+                t.setName("CH-");
+                return t;
+            }
+        };
+        return factory;
     }
 
     public void interruptAllChannels() {
@@ -113,13 +126,21 @@ public class ChannelsContainer {
         HashMap<String, Channel> emptyChannels = new HashMap<>();
         for (int i = 1; i < 9; i++) {
             Channel ch = new Channel();
+            ch.id = generateRandomUnicId();
             ch.name = "Channel_" + i;
             ch.number.set(i);
             for (int j = 0; j < ch.videoStreamList.size(); j++) {
-                ch.videoStreamList.get(j).id=(5000 + i * 100 + (j + 1));
-                ch.videoStreamList.get(j).inputUrl = "rtsp://admin:galaxymini111@192.168.0.100:554/live/main";
-                ch.videoStreamList.get(j).outputUrl = "rtp://192.168.0.48:" + ch.videoStreamList.get(j).id + "?pkt_size=1300";
-                if (j == 1) {
+                ch.videoStreamList.get(j).id = (i * 100 + (j + 1));
+                ch.videoStreamList.get(j).parrentId = ch.id;
+                if (j==0) {
+                    ch.videoStreamList.get(j).inputUrl = "rtsp://admin:galaxymini111@192.168.0.100:554/live/main";
+                    ch.videoStreamList.get(j).outputUrl = "rtp://192.168.0.48:" + (5000 + ch.videoStreamList.get(j).id) + "?pkt_size=1300";
+                }
+                if (j==1){
+                    ch.videoStreamList.get(j).inputUrl = "rtsp://admin:galaxymini111@192.168.0.100:554/live/sub";
+                    ch.videoStreamList.get(j).outputUrl = "rtp://192.168.0.48:" + (5000 + ch.videoStreamList.get(j).id) + "?pkt_size=1300";
+                }
+                if (j == 0) {
                     ch.videoStreamList.get(j).grabberFpsQueue1.set(5);
                 }
                 if (i == 1) {
@@ -128,9 +149,8 @@ public class ChannelsContainer {
                     ch.videoStreamList.get(j).enableStream.set(true);
                 }
             }
-
-            ch.id = generateRandomUnicId();
             logger.info("Channel:[" + "Nr:" + ch.number + ",ID:" + ch.id + ",Name:" + ch.name + "]" + " was generated");
+            ch.motionDetector = new MotionDetector(ch.videoStreamList);
             emptyChannels.put(ch.id, ch);
         }
         tempId = new ArrayList<>();

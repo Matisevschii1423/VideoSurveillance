@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.5.2/css/bootstrap.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Title of the document</title>
+    </head>
+</head>
+<body class="bg-secondary">
+
+
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded ml-2 mr-2 mt-2 mb-2">
+
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="#">My project</a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/channels">Channels</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/streams">Streams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Parameters</a>
+            </li>
+        </ul>
+        <!-- Links -->
+
+    </div>
+    <!-- Collapsible content -->
+
+</nav>
+<!--/.Navbar-->
+
+
+<div class="container-fluid">
+    <div class="row m-0">
+        <!--Col 1-->
+        <div class="bg-dark rounded col-xl-9 col-lg-12 col-md-12 col-sm-12 p-2 mb-2">
+            <!-- Video Player -->
+            <div class="bg-secondary rounded">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video id="channel-1" class="video-fluid embed-responsive-item" autoplay loop muted playsinline allowfullscreen controls></video>
+                </div>
+            </div>
+        </div>
+        <!--Col 1-->
+        <!--Col 2-->
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="bg-dark rounded p-2" id="parameters">
+                <div class="row">
+                    <!--Row 1-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Channel selector
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" th:each="channel: ${channels}" th:value="${channel.id}" th:text="${channel.name}"></a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="" id="ch_id">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 5-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Object detector
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="true">Enabled</a>
+                                <a class="dropdown-item" href="#" value="false">Disabled</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Object det.on stream
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="" id="">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 7-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Object det. threshold
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                                <a class="dropdown-item" href="#" value="6">6</a>
+                                <a class="dropdown-item" href="#" value="7">7</a>
+                                <a class="dropdown-item" href="#" value="8">8</a>
+                                <a class="dropdown-item" href="#" value="9">9</a>
+                                <a class="dropdown-item" href="#" value="10">10</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="">Unknown</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Col 2-->
+    </div>
+</div>
+
+<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+<script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+<script src="libs/js/adapter.min.js"></script>
+<script src="libs/js/web_socket.min.js"></script>
+<script src="libs/js/janus.js"></script>
+<script src="scripts/obj_det.js"></script>
+<script src="scripts/streaming.js"></script>
+</body>
+</html>

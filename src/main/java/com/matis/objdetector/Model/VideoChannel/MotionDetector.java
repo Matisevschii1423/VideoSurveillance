@@ -23,6 +23,7 @@ public class MotionDetector implements Serializable, Runnable {
     public AtomicInteger threshold;
     public AtomicInteger streamSelector;
     public String motionZone;
+    public String parrentId;
     public transient AtomicBoolean refreshDetector;
 
     /*** detector state*/
@@ -37,18 +38,16 @@ public class MotionDetector implements Serializable, Runnable {
     private transient Mat image;
     private transient Size blurKsize;
     private transient List<MatOfPoint> contours;
-    private transient VideoStream videoStream1;
-    private transient VideoStream videoStream2;
+    private List<VideoStream> videoStreamList;
 
-    public MotionDetector(VideoStream videoStream1, VideoStream videoStream2) {
+    public MotionDetector(List<VideoStream> videoStreamList) {
         this.enableDetector = new AtomicBoolean(false);
         this.threshold = new AtomicInteger(5);
         this.streamSelector = new AtomicInteger(2);
         this.refreshDetector = new AtomicBoolean(false);
         this.running = new AtomicBoolean(false);
         this.motionZone = this.createDefaultMdZone();
-        this.videoStream1 = videoStream1;
-        this.videoStream2 = videoStream2;
+        this.videoStreamList = videoStreamList;
         this.matZone = createMaskMat(this.motionZone);
     }
 
@@ -176,17 +175,16 @@ public class MotionDetector implements Serializable, Runnable {
 
     @Override
     public void run() {
+        Thread.currentThread().setName(Thread.currentThread().getName()+"MD");
         BufferedImage image = null;
+        this.running.set(true);
+        this.refreshDetector.set(false);
+        logger.info("MD started");
         while (this.refreshDetector.get() == false && !Thread.currentThread().isInterrupted()) {
-            this.refreshDetector.set(false);
-            this.running.set(true);
             try {
-                if (this.streamSelector.get() == 1) {
-                    image = this.videoStream1.bufferedImagesQueue1.poll(1l, TimeUnit.SECONDS);
-                }
-                if (this.streamSelector.get() == 2) {
-                    image = this.videoStream2.bufferedImagesQueue1.poll(1l, TimeUnit.SECONDS);
-                }
+
+                image = this.videoStreamList.get(this.streamSelector.get()).bufferedImagesQueue1.poll(1l, TimeUnit.SECONDS);
+
                 if (image != null) {
                     if (((DataBufferByte) image.getRaster().getDataBuffer()).getData() != null) {
                         if (this.blurKsize == null) {
@@ -198,9 +196,11 @@ public class MotionDetector implements Serializable, Runnable {
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                break;
             }
         }
-
+        logger.info("MD stoped");
+        this.running.set(false);
     }
 
 

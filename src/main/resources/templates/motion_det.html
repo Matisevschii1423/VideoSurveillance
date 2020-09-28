@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.5.2/css/bootstrap.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Title of the document</title>
+    </head>
+</head>
+<body class="bg-secondary">
+
+
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded ml-2 mr-2 mt-2 mb-2">
+
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="#">My project</a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/channels">Channels</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/streams">Streams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Parameters</a>
+            </li>
+        </ul>
+        <!-- Links -->
+
+    </div>
+    <!-- Collapsible content -->
+
+</nav>
+<!--/.Navbar-->
+
+
+<div class="container-fluid">
+    <div class="row m-0">
+        <!--Col 1-->
+        <div class="bg-dark rounded col-xl-9 col-lg-12 col-md-12 col-sm-12 p-2 mb-2">
+            <!-- Video Player -->
+            <div class="bg-secondary rounded">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video id="video_player" class="video-fluid embed-responsive-item" value="" href="/number" autoplay loop muted playsinline allowfullscreen ></video>
+                </div>
+            </div>
+            <div class="row mt-1 ml-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="stream_1" value="">
+                    <label class="form-check-label" for="stream_1">H</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="stream_2" value="" checked>
+                    <label class="form-check-label" for="stream_2">L</label>
+                </div>
+            </div>
+        </div>
+        <!--Col 1-->
+        <!--Col 2-->
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="bg-dark rounded p-2" id="parameters">
+                <div class="row">
+                    <!--Row 1-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Channel selector
+                            </a>
+                            <div class="dropdown-menu text-light" id="ch_dropdown_menu">
+                                <a class="dropdown-item" href="#" th:each="channel: ${channels}" th:value="${channel.id}" th:text="${channel.name}"></a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/channels/" value="" id="ch_id">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2 ">
+                    <!--Row 2-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Motion detector
+                            </a>
+                            <div class="dropdown-menu text-light" id="md_enable_dropdown_menu">
+                                <a class="dropdown-item" href="#" value="true">Enabled</a>
+                                <a class="dropdown-item" href="#" value="false">Disabled</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/mdetector/enable" value="" id="md_enable">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 4-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Motion det. threshold
+                            </a>
+                            <div class="dropdown-menu text-light" id="md_threshold_dropdown_menu">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                                <a class="dropdown-item" href="#" value="6">6</a>
+                                <a class="dropdown-item" href="#" value="7">7</a>
+                                <a class="dropdown-item" href="#" value="8">8</a>
+                                <a class="dropdown-item" href="#" value="9">9</a>
+                                <a class="dropdown-item" href="#" value="10">10</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/mdetector/threshold" value="" id="md_threshold">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Motion det.on stream
+                            </a>
+                            <div class="dropdown-menu text-light" id="md_stream_dropdown_menu">
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/mdetector/stream_sel" value="" id="md_stream">Unknown</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Col 2-->
+    </div>
+</div>
+
+<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+<script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+<script src="libs/js/adapter.min.js"></script>
+<script src="libs/js/web_socket.min.js"></script>
+<script src="libs/js/janus.js"></script>
+<script src="scripts/motion_det.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.5.2/css/bootstrap.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Title of the document</title>
+    </head>
+</head>
+<body class="bg-secondary">
+
+
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded ml-2 mr-2 mt-2 mb-2">
+
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="#">My project</a>
+
+    <!-- Collapse button -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+
+        <!-- Links -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/channels">Channels</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/streams">Streams</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Parameters</a>
+            </li>
+        </ul>
+        <!-- Links -->
+
+    </div>
+    <!-- Collapsible content -->
+
+</nav>
+<!--/.Navbar-->
+
+
+<div class="container-fluid">
+    <div class="row m-0">
+        <!--Col 1-->
+        <div class="col-12">
+            <div class="row">
+                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 p-2 ">
+                    <div class="bg-dark rounded p-2">
+                        <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                            <a class="nav-link text-light btn-outline-secondary mb-1 active" style="hover:disabled;" id="ch_1_link" data-toggle="pill" href="#ch_1" role="tab" aria-controls="ch_1" aria-selected="true">Channel_1</a>
+                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_2_link" data-toggle="pill" href="#ch_2" role="tab" aria-controls="ch_2" aria-selected="false">Channel_2</a>
+                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_3_link" data-toggle="pill" href="#ch_3" role="tab" aria-controls="ch_3" aria-selected="false">Channel_3</a>
+                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_4_link" data-toggle="pill" href="#ch_4" role="tab" aria-controls="ch_4" aria-selected="false">Channel_4</a>
+                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_5_link" data-toggle="pill" href="#ch_5" role="tab" aria-controls="ch_4" aria-selected="false">Channel_5</a>
+                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_6_link" data-toggle="pill" href="#ch_6" role="tab" aria-controls="ch_4" aria-selected="false">Channel_6</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 p-2">
+                    <div class="bg-dark rounded p-2">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="ch_1" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="bg-secondary rounded">
+                                            <div class="embed-responsive embed-responsive-16by9">
+                                                <video id="video_player" class="video-fluid embed-responsive-item" value="" href="/number" autoplay loop muted playsinline allowfullscreen ></video>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-9">
+                                        <form>
+                                            <div class="form-group">
+                                                <label class="text-light" for="stream_1_input">Stream 1</label>
+                                                <input type="text" class="form-control" id="stream_1_input" >
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="text-light" for="stream_2_input">Stream 2</label>
+                                                <input type="text" class="form-control" id="stream_2_input" >
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="ch_2" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_2</div>
+                            <div class="tab-pane fade" id="ch_3" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_3</div>
+                            <div class="tab-pane fade" id="ch_4" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_4</div>
+                            <div class="tab-pane fade" id="ch_5" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_5</div>
+                            <div class="tab-pane fade" id="ch_6" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+<script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
+<script src="libs/js/adapter.min.js"></script>
+<script src="libs/js/web_socket.min.js"></script>
+<script src="libs/js/janus.js"></script>
+</body>
+</html>

@@ -25,7 +25,7 @@
 
 
 <!--Navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded ml-2 mr-2 mt-2">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded ml-2 mr-2 mt-2 mb-2">
 
     <!-- Navbar brand -->
     <a class="navbar-brand" href="#">My project</a>
@@ -60,67 +60,278 @@
 
 
 <div class="container-fluid">
-    <div id="alert">
-        <div class="alert alert-warning alert-dismissible fade show mt-2 ml-2" role="alert">
-            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6 col-sm-12 mt-2 ml-2">
-            <div class="container-fluid bg-dark rounded">
+    <div class="row m-0">
+        <!--Col 1-->
+        <div class="bg-dark rounded col-xl-9 col-lg-12 col-md-12 col-sm-12 p-2 mb-2">
+            <!-- Video Player -->
+            <div class="bg-secondary rounded">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <video id="channel-1" class="embed-responsive-item" alt="1 slide" autoplay loop muted playsinline allowfullscreen></video>
+                    <video id="channel-1" class="video-fluid embed-responsive-item" autoplay loop muted playsinline allowfullscreen></video>
                 </div>
             </div>
-            <div class="container-fluid">
-                <div class="row rounded mt-2">
-                    <div id="channelSelector" class="col-xl-10 col-lg-10 col-md-10 btn-group btn-group-toggle" data-toggle="buttons">
-                        <label class="btn btn-dark active">
-                            <input type="radio" name="options" id="1" checked> 1
-                        </label>
-                        <label class="btn btn-dark">
-                            <input type="radio" name="options" id="2"> 2
-                        </label>
-                        <label class="btn btn-dark">
-                            <input type="radio" name="options" id="3"> 3
-                        </label>
-                        <label class="btn btn-dark">
-                            <input type="radio" name="options" id="4"> 4
-                        </label>
-                        <label class="btn btn-dark">
-                            <input type="radio" name="options" id="5"> 5
-                        </label>
-                            <label class="btn btn-dark">
-                                <input type="radio" name="options" id="6"> 6
-                            </label>
-                            <label class="btn btn-dark">
-                                <input type="radio" name="options" id="7"> 7
-                            </label>
-                            <label class="btn btn-dark">
-                                <input type="radio" name="options" id="8"> 8
-                            </label>
-                        </div>
-                        <div id="streamSelector" class="col-xl-2 col-lg-2 col-md-2 col-sm-2 btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-dark active">
-                                <input type="radio" name="options" id="01" checked> H
-                            </label>
-                            <label class="btn btn-dark">
-                                <input type="radio" name="options" id="02"> L
-                            </label>
-                        </div>
+            <div class="row mt-1 ml-1">
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 ">
+                    <label class="text-white mt-2">Channel</label>
+                </div>
+                <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 mt-1">
+                    <input class="form-control btn-secondary" type="text" placeholder="Default input">
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <!--Col 1-->
+        <!--Col 2-->
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <div class="bg-dark rounded p-2" id="parameters">
+                <div class="row">
+                    <!--Row 1-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Channel selector
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="Channel_1">Channel_1</a>
+                                <a class="dropdown-item" href="#" value="Channel_2">Channel_2</a>
+                                <a class="dropdown-item" href="#" value="Channel_3">Channel_3</a>
+                                <a class="dropdown-item" href="#" value="Channel_4">Channel_4</a>
+                                <a class="dropdown-item" href="#" value="Channel_5">Channel_5</a>
+                                <a class="dropdown-item" href="#" value="Channel_6">Channel_6</a>
+                                <a class="dropdown-item" href="#" value="Channel_7">Channel_7</a>
+                                <a class="dropdown-item" href="#" value="Channel_8">Channel_8</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="" id="ch_id">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2 ">
+                    <!--Row 2-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Motion detector
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="true">Enabled</a>
+                                <a class="dropdown-item" href="#" value="false">Disabled</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/mdetector/enable" value="" id="md_enable">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 4-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Motion det. threshold
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                                <a class="dropdown-item" href="#" value="6">6</a>
+                                <a class="dropdown-item" href="#" value="7">7</a>
+                                <a class="dropdown-item" href="#" value="8">8</a>
+                                <a class="dropdown-item" href="#" value="9">9</a>
+                                <a class="dropdown-item" href="#" value="10">10</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/mdetector/threshold" value="">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Motion det.on stream
+                            </a>
+                            <div class="dropdown-menu text-light">
+
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/mdetector/stream_sel" id="stream2_q1_fps">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2 ">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Stream_1 m.d. FPS
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/streams/1/queue1fps" value="" id="stream1_q1_fps">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Stream_2 m.d. FPS
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/streams/2/queue1fps" value="" id="stream2_q1_fps">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 5-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Object detector
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="true">Enabled</a>
+                                <a class="dropdown-item" href="#" value="false">Disabled</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Object det.on stream
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="" id="stream2_q1_fps">Unknown</label>
+                    </div>
+                </div>
+
+
+                <div class="row mt-2 ">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Stream_1 obj FPS
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/streams/1/queue2fps" value="" id="stream1_q1_fps">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 3-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Stream_2 obj FPS
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" href="/streams/2/queue2fps" value="" id="stream2_q1_fps">Unknown</label>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <!--Row 7-->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mt-2">
+                        <li class="nav-item dropdown">
+                            <a class="text-light dropdown-toggle" href="/" data-toggle="dropdown">
+                                Object det. threshold
+                            </a>
+                            <div class="dropdown-menu text-light">
+                                <a class="dropdown-item" href="#" value="0">0</a>
+                                <a class="dropdown-item" href="#" value="1">1</a>
+                                <a class="dropdown-item" href="#" value="2">2</a>
+                                <a class="dropdown-item" href="#" value="3">3</a>
+                                <a class="dropdown-item" href="#" value="4">4</a>
+                                <a class="dropdown-item" href="#" value="5">5</a>
+                                <a class="dropdown-item" href="#" value="6">6</a>
+                                <a class="dropdown-item" href="#" value="7">7</a>
+                                <a class="dropdown-item" href="#" value="8">8</a>
+                                <a class="dropdown-item" href="#" value="9">9</a>
+                                <a class="dropdown-item" href="#" value="10">10</a>
+                            </div>
+                        </li>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                        <label class="text-white mt-2" value="">Unknown</label>
+                    </div>
+                </div>
+            </div>
         </div>
+        <!--Col 2-->
     </div>
 </div>
 
-<script src="webjars/jquery/1.9.1/jquery.min.js"></script>
+<script src="webjars/jquery/3.5.1/jquery.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
 <script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
 <script src="libs/js/adapter.min.js"></script>
 <script src="libs/js/web_socket.min.js"></script>
 <script src="libs/js/janus.js"></script>

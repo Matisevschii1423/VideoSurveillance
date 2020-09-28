@@ -1,0 +1,54 @@
+2020-09-29 00:00:00,145 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport[main]Initializing ExecutorService 'applicationTaskExecutor'
+2020-09-29 00:00:00,328 INFO org.springframework.scheduling.concurrent.ExecutorConfigurationSupport[main]Initializing ExecutorService 'taskScheduler'
+2020-09-29 00:00:00,341 INFO org.apache.juli.logging.DirectJDKLog[main]Starting ProtocolHandler ["http-nio-8080"]
+2020-09-29 00:00:00,361 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer[main]Tomcat started on port(s): 8080 (http) with context path ''
+2020-09-29 00:00:00,371 INFO org.springframework.boot.StartupInfoLogger[main]Started ObjDetectorApplication in 2.035 seconds (JVM running for 2.347)
+2020-09-29 00:00:00,374 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Deserialization process has started
+2020-09-29 00:00:00,399 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:7,ID:mfIF2G7H,Name:Channel_7] has been deserialized
+2020-09-29 00:00:00,400 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:2,ID:gqMAKvBL,Name:Channel_2] has been deserialized
+2020-09-29 00:00:00,401 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:3,ID:kvHBay5W,Name:Channel_3] has been deserialized
+2020-09-29 00:00:00,402 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:4,ID:BKtF1fEh,Name:Channel_4] has been deserialized
+2020-09-29 00:00:00,403 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:6,ID:ejNztoGc,Name:Channel_6] has been deserialized
+2020-09-29 00:00:00,403 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:5,ID:aQy5OEUb,Name:Channel_5] has been deserialized
+2020-09-29 00:00:00,404 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:1,ID:cBKYvCC4,Name:Channel_1] has been deserialized
+2020-09-29 00:00:00,405 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:8,ID:icqXexfc,Name:Channel_8] has been deserialized
+2020-09-29 00:00:00,405 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Deserialization process has ended
+2020-09-29 00:00:00,406 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Serialization process has started
+2020-09-29 00:00:00,408 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:7,ID:mfIF2G7H,Name:Channel_7] has been serialized
+2020-09-29 00:00:00,408 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:2,ID:gqMAKvBL,Name:Channel_2] has been serialized
+2020-09-29 00:00:00,409 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:3,ID:kvHBay5W,Name:Channel_3] has been serialized
+2020-09-29 00:00:00,409 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:4,ID:BKtF1fEh,Name:Channel_4] has been serialized
+2020-09-29 00:00:00,409 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:6,ID:ejNztoGc,Name:Channel_6] has been serialized
+2020-09-29 00:00:00,409 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:5,ID:aQy5OEUb,Name:Channel_5] has been serialized
+2020-09-29 00:00:00,410 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:1,ID:cBKYvCC4,Name:Channel_1] has been serialized
+2020-09-29 00:00:00,410 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Channel:[Nr:8,ID:icqXexfc,Name:Channel_8] has been serialized
+2020-09-29 00:00:00,410 INFO com.matis.objdetector.Model.VideoChannel.ChannelsContainer[main]Serialization process has ended
+2020-09-29 00:00:00,469 INFO org.apache.juli.logging.DirectJDKLog[http-nio-8080-exec-1]Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-09-29 00:00:00,469 INFO org.springframework.web.servlet.FrameworkServlet[http-nio-8080-exec-1]Initializing Servlet 'dispatcherServlet'
+2020-09-29 00:00:00,473 INFO org.springframework.web.servlet.FrameworkServlet[http-nio-8080-exec-1]Completed initialization in 4 ms
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[mfIF2G7H]Channel mfIF2G7H-->released in new thread
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[kvHBay5W]Channel kvHBay5W-->released in new thread
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[cBKYvCC4]Channel cBKYvCC4-->released in new thread
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[gqMAKvBL]Channel gqMAKvBL-->released in new thread
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[ejNztoGc]Channel ejNztoGc-->released in new thread
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[BKtF1fEh]Channel BKtF1fEh-->released in new thread
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[cBKYvCC4]Channel cBKYvCC4-->channel has been enabled
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[kvHBay5W]Channel kvHBay5W-->is waiting to be enabled
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[aQy5OEUb]Channel aQy5OEUb-->released in new thread
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[icqXexfc]Channel icqXexfc-->released in new thread
+2020-09-29 00:00:01,416 INFO com.matis.objdetector.Model.VideoChannel.Channel[gqMAKvBL]Channel gqMAKvBL-->is waiting to be enabled
+2020-09-29 00:00:01,415 INFO com.matis.objdetector.Model.VideoChannel.Channel[mfIF2G7H]Channel mfIF2G7H-->is waiting to be enabled
+2020-09-29 00:00:01,416 INFO com.matis.objdetector.Model.VideoChannel.Channel[ejNztoGc]Channel ejNztoGc-->is waiting to be enabled
+2020-09-29 00:00:01,416 INFO com.matis.objdetector.Model.VideoChannel.Channel[aQy5OEUb]Channel aQy5OEUb-->is waiting to be enabled
+2020-09-29 00:00:01,416 INFO com.matis.objdetector.Model.VideoChannel.Channel[BKtF1fEh]Channel BKtF1fEh-->is waiting to be enabled
+2020-09-29 00:00:01,416 INFO com.matis.objdetector.Model.VideoChannel.Channel[cBKYvCC4]Channel_cBKYvCC4_launch componnents
+2020-09-29 00:00:01,416 INFO com.matis.objdetector.Model.VideoChannel.Channel[icqXexfc]Channel icqXexfc-->is waiting to be enabled
+2020-09-29 00:00:01,417 INFO com.matis.objdetector.Model.VideoChannel.Channel[cBKYvCC4]Channel_cBKYvCC4_stream_101_launched
+2020-09-29 00:00:01,418 INFO com.matis.objdetector.Model.VideoChannel.Channel[cBKYvCC4]Channel_cBKYvCC4_stream_102_launched
+2020-09-29 00:00:01,419 INFO com.matis.objdetector.Model.VideoChannel.Channel[cBKYvCC4]Channel_cBKYvCC4_mdetector_launched
+2020-09-29 00:00:01,419 INFO com.matis.objdetector.Model.VideoChannel.Channel[cBKYvCC4]Componnents launched
+2020-09-29 00:00:02,429 INFO com.matis.objdetector.Model.VideoChannel.VideoStream[cBKYvCC4-101]stream released in new thread
+2020-09-29 00:00:02,429 INFO com.matis.objdetector.Model.VideoChannel.MotionDetector[pool-42-thread-3MD]MD started
+2020-09-29 00:00:02,429 INFO com.matis.objdetector.Model.VideoChannel.VideoStream[cBKYvCC4-102]stream released in new thread
+2020-09-29 00:00:02,430 INFO com.matis.objdetector.Model.VideoChannel.VideoStream[cBKYvCC4-101]the stream has been enabled
+2020-09-29 00:00:02,430 INFO com.matis.objdetector.Model.VideoChannel.VideoStream[cBKYvCC4-102]the stream has been enabled

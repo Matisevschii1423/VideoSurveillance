@@ -11,6 +11,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -31,6 +32,7 @@ public class VideoStream implements Externalizable, Runnable {
     public AtomicLong grabberFpsQueue2;
     public AtomicBoolean refrashStream;
     public volatile Integer id;
+    public volatile String parrentId;
 
     /*** videoStream state */
     public AtomicBoolean running;
@@ -54,6 +56,7 @@ public class VideoStream implements Externalizable, Runnable {
         this.inputUrl = "";
         this.outputUrl = "";
         this.id = 0;
+        this.parrentId = "";
         this.grabberFpsQueue1 = new AtomicLong(0);
         this.grabberFpsQueue2 = new AtomicLong(0);
         this.enableStream = new AtomicBoolean(false);
@@ -71,6 +74,7 @@ public class VideoStream implements Externalizable, Runnable {
         this.progressListener = this.createProgressListner();
         this.executorService = Executors.newSingleThreadScheduledExecutor();
     }
+
 
     private FrameConsumer createFrameConsumer(LinkedBlockingQueue<BufferedImage> bufferedImagesQueue) {
         FrameConsumer frameConsumer = new FrameConsumer() {
@@ -122,7 +126,7 @@ public class VideoStream implements Externalizable, Runnable {
     }
 
     private FFmpeg createFFmpeg() {
-        FFmpeg ffmpeg = FFmpeg.atPath();
+        FFmpeg ffmpeg = FFmpeg.atPath();//ffmpeg.exe
         ffmpeg.addArguments("-rtsp_transport", "tcp")
                 .addArguments("-stimeout", "1000000")
                 .addArguments("-i", this.inputUrl)
@@ -156,6 +160,7 @@ public class VideoStream implements Externalizable, Runnable {
         out.writeObject(this.grabberFpsQueue1);
         out.writeObject(this.grabberFpsQueue2);
         out.writeObject(this.id);
+        out.writeObject(this.parrentId);
     }
 
     @Override
@@ -167,25 +172,30 @@ public class VideoStream implements Externalizable, Runnable {
         this.grabberFpsQueue1 = (AtomicLong) in.readObject();
         this.grabberFpsQueue2 = (AtomicLong) in.readObject();
         this.id = (Integer)in.readObject();
+        this.parrentId = (String)in.readObject();
     }
 
 
     @Override
     public void run() {
-        logger.info("Stream executed");
-        while (this.enableStream.get() == false) {
-            if (Thread.currentThread().isInterrupted()) {
-                break;
-            }
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        Thread.currentThread().setName(this.parrentId+"-"+this.id);
+        logger.info("stream released in new thread");
+        if (this.enableStream.get()==false) {
+            logger.info("Stream is waiting to be enabled");
+            while (this.enableStream.get() == false) {
+                if (Thread.currentThread().isInterrupted()) {    //////<---------------
+                    break;
+                }
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
         if (this.enableStream.get() == true) {
-
+            logger.info("the stream has been enabled");
             this.ffmpeg = this.createFFmpeg();
             this.refrashStream.set(false);
             try {
@@ -202,6 +212,6 @@ public class VideoStream implements Externalizable, Runnable {
                 this.running.set(false);
             }
         }
-        logger.info("Stream interrupted");
+        logger.info("Stream thread has finished");
     }
 }

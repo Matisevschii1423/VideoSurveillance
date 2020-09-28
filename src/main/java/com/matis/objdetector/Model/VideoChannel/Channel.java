@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
@@ -30,8 +29,8 @@ public class Channel implements Externalizable, Runnable {
     public MotionDetector motionDetector;
 
     /*** scheduledExecutorServices for channel componnents */
-    private List<ExecutorService> videoStreamExecutorList;
-    private ScheduledExecutorService schExecutorMDetector;
+    private ScheduledExecutorService videoStreamsExecutor;
+    private ScheduledExecutorService schExecutor;
 
 
     public Channel() {
@@ -39,41 +38,27 @@ public class Channel implements Externalizable, Runnable {
         this.enableChannel = new AtomicBoolean(false);
         this.stateChannel = new AtomicBoolean(false);
         this.videoStreamList = Arrays.asList(new VideoStream(),new VideoStream());
-        this.motionDetector = new MotionDetector(this.videoStreamList.get(0), this.videoStreamList.get(1));
-        this.videoStreamExecutorList = new ArrayList<>();
-        this.schExecutorMDetector = Executors.newSingleThreadScheduledExecutor(this.getFactory("MD_" + motionDetector.streamSelector));
-    }
-
-    private ThreadFactory getFactory(String threadName) {
-        ThreadFactory factory = new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(r);
-                t.setName("Ch-" + id + "-" + threadName);
-                return t;
-            }
-        };
-        return factory;
+        this.motionDetector = new MotionDetector(videoStreamList);
+        this.schExecutor = Executors.newScheduledThreadPool(3);
     }
 
     private void launchStreamsExecutors() {
+        this.logger.info("Channel_"+this.id+"_launch componnents");
+        this.schExecutor = Executors.newScheduledThreadPool(3);
         if (this.videoStreamList.size()!=0){
             for (int i = 0;i<videoStreamList.size();i++){
-                ScheduledExecutorService schExecutor = Executors.newSingleThreadScheduledExecutor(this.getFactory("s_"+i));
                 schExecutor.scheduleWithFixedDelay(this.videoStreamList.get(i), 1, 2, TimeUnit.SECONDS);
-                this.videoStreamExecutorList.add(schExecutor);
+                this.logger.info("Channel_"+this.id+"_stream_"+this.videoStreamList.get(i).id+"_launched");
             }
         }
-        this.schExecutorMDetector.scheduleWithFixedDelay(this.motionDetector, 1, 2, TimeUnit.SECONDS);
+        this.schExecutor.scheduleWithFixedDelay(this.motionDetector, 1, 2, TimeUnit.SECONDS);
+        this.logger.info("Channel_"+this.id+"_mdetector_launched");
+        this.logger.info("Componnents launched");
     }
 
     private void interruptStreamsExecutors() {
-        if (this.videoStreamExecutorList.size()!=0){
-            for (int i = 0;i<videoStreamExecutorList.size();i++){
-                this.videoStreamExecutorList.get(i).shutdownNow();
-            }
-        }
-        this.schExecutorMDetector.shutdownNow();
+        this.schExecutor.shutdownNow();
+        this.logger.info("Componnents stopped");
     }
 
     @Override
@@ -105,34 +90,40 @@ public class Channel implements Externalizable, Runnable {
 
     @Override
     public void run() {
-        this.logger.info("Channel_"+this.id+"_executed");
-        while(this.enableChannel.get() == false){
-            if (Thread.currentThread().isInterrupted()){
-                break;
-            }
-            try {
-                Thread.sleep(250);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if (this.enableChannel.get()) {
-            this.launchStreamsExecutors();
-            while (this.enableChannel.get()) {
-                if (Thread.currentThread().isInterrupted()){
+        Thread.currentThread().setName(this.id);
+        this.logger.info("Channel "+this.id+"-->released in new thread");
+        if (this.enableChannel.get() == false) {
+            this.logger.info("Channel "+this.id+"-->is waiting to be enabled");
+            while (this.enableChannel.get() == false) {
+                if (Thread.currentThread().isInterrupted()) {
                     break;
                 }
-                this.stateChannel.set(true);
                 try {
                     Thread.sleep(250);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+        }
+        if (this.enableChannel.get()) {
+            this.logger.info("Channel "+this.id+"-->channel has been enabled");
+            this.launchStreamsExecutors();
+            while (this.enableChannel.get()) {
+                if (Thread.currentThread().isInterrupted()){
+                    this.logger.info("Channel "+this.id+"-->the thread was interrupted");
+                    break;
+                }
+                this.stateChannel.set(true);
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    this.logger.info("Channel "+this.id+"-->the thread was interrupted");
+                }
+            }
             this.interruptStreamsExecutors();
         }
         this.stateChannel.set(false);
-        this.logger.info("Channel_"+this.id+"_interrupted");
+        this.logger.info("Channel "+this.id+"-->the thread has ended");
     }
 
 }
