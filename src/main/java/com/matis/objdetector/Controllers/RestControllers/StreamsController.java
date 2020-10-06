@@ -1,111 +1,154 @@
 package com.matis.objdetector.Controllers.RestControllers;
 
-
-import com.matis.objdetector.Controllers.Exceptions.NotFoundException;
-import com.matis.objdetector.Controllers.Helpers.ReqBoolValue;
-import com.matis.objdetector.Controllers.Helpers.ReqIntValue;
-import com.matis.objdetector.Controllers.Helpers.ReqStringValue;
+import com.matis.objdetector.Controllers.Helpers.*;
 import com.matis.objdetector.Model.ChannelsLoader;
 import com.matis.objdetector.Model.VideoChannel.Channel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("channels")
 public class StreamsController {
 
-    @GetMapping("{chId}/streams/{streamId}/enable")
-    public boolean getEnable(@PathVariable("chId") String chId,@PathVariable("streamId") int streamId ){
+    @GetMapping(value = "{chId}/streams/{streamId}/enable", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getEnable(@PathVariable("chId") String chId,
+                                              @PathVariable("streamId") int streamId) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(chId);
-        if (ch!=null){
-            return ch.videoStreamList.get(streamId).enableStream.get();
-        }else{
-            throw new NotFoundException();
+        if (ch != null) {
+            String responseValue = Boolean.toString(ch.videoStreamList.get(streamId).enableStream.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, "null"), HttpStatus.NOT_FOUND);
         }
     }
 
-    @PutMapping("{chId}/streams/{streamId}/enable")
-    public void setEnable(@RequestBody ReqBoolValue value, @PathVariable("chId") String chId, @PathVariable("streamId") int streamId ){
+    @PutMapping(value = "{chId}/streams/{streamId}/enable", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setEnable(@RequestBody RecValue value,
+                                              @PathVariable("chId") String chId,
+                                              @PathVariable("streamId") int streamId) {
         try {
             ChannelsLoader.channelsContainer.channels.get(chId)
-                    .videoStreamList.get(streamId).enableStream.set(value.getValue());
+                    .videoStreamList.get(streamId).enableStream.set(Boolean.valueOf(value.getValue()));
+            String responseValue = Boolean.toString(ChannelsLoader.channelsContainer.channels.get(chId)
+                    .videoStreamList.get(streamId).enableStream.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } catch (ArrayIndexOutOfBoundsException ex) {
-            throw new NotFoundException();
+            String responseValue = Boolean.toString(ChannelsLoader.channelsContainer.channels.get(chId)
+                    .videoStreamList.get(streamId).enableStream.get());
+            return new ResponseEntity<>(new ResValue(false, responseValue), HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("{chId}/streams/{streamId}/inputUrl")
-    public String getInputStream(@PathVariable("chId") String chId,@PathVariable("streamId") int streamId ){
+    @GetMapping(value = "{chId}/streams/{streamId}/inputUrl", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getInputStream(@PathVariable("chId") String chId,
+                                                   @PathVariable("streamId") int streamId) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(chId);
-        if (ch!=null){
-            return ch.videoStreamList.get(streamId).inputUrl;
-        }else{
-            throw new NotFoundException();
+        if (ch != null) {
+            String responseValue = ch.videoStreamList.get(streamId).inputUrl;
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @PutMapping("{chId}/streams/{streamId}/inputUrl")
-    public void setInputStream(@RequestBody ReqStringValue value, @PathVariable("chId") String chId, @PathVariable("streamId") int streamId ){
+    @PutMapping(value = "{chId}/streams/{streamId}/inputUrl", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setInputStream(@RequestBody RecValue value,
+                                                   @PathVariable("chId") String chId,
+                                                   @PathVariable("streamId") int streamId) {
         try {
             ChannelsLoader.channelsContainer.channels.get(chId)
-                    .videoStreamList.get(streamId).inputUrl=value.getValue();
+                    .videoStreamList.get(streamId).inputUrl = value.getValue();
             ChannelsLoader.channelsContainer.channels.get(chId)
                     .videoStreamList.get(streamId).refrashStream.set(true);
+            String responseValue = ChannelsLoader.channelsContainer.channels.get(chId)
+                    .videoStreamList.get(streamId).inputUrl;
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } catch (NullPointerException ex) {
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("{chId}/streams/{streamId}/queue1fps")
-    public int getQueue1Fps(@PathVariable("chId") String chId,@PathVariable("streamId") int streamId ){
+    @GetMapping(value = "{chId}/streams/{streamId}/queue1fps", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getQueue1Fps(@PathVariable("chId") String chId,
+                                                 @PathVariable("streamId") int streamId) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(chId);
-        if (ch!=null){
-            return (int)ch.videoStreamList.get(streamId).grabberFpsQueue1.get();
-        }else{
-            throw new NotFoundException();
+        if (ch != null) {
+            String responseValue = Long.toString(ch.videoStreamList.get(streamId).grabberFpsQueue1.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @PutMapping("{chId}/streams/{streamId}/queue1fps")
-    public void setQueue1Fps(@RequestBody ReqIntValue value, @PathVariable("chId") String chId, @PathVariable("streamId") int streamId ){
+    @PutMapping(value = "{chId}/streams/{streamId}/queue1fps", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setQueue1Fps(@RequestBody RecValue value,
+                                                 @PathVariable("chId") String chId,
+                                                 @PathVariable("streamId") int streamId) {
         try {
             ChannelsLoader.channelsContainer.channels.get(chId)
-                    .videoStreamList.get(streamId-1).grabberFpsQueue1.set(value.getValue());
+                    .videoStreamList.get(streamId - 1).grabberFpsQueue1.set(Integer.valueOf(value.getValue()));
             ChannelsLoader.channelsContainer.channels.get(chId)
-                    .videoStreamList.get(streamId-1).refrashStream.set(true);
+                    .videoStreamList.get(streamId - 1).refrashStream.set(true);
+            String responseValue = Long.toString(ChannelsLoader.channelsContainer.channels.get(chId)
+                    .videoStreamList.get(streamId - 1).grabberFpsQueue1.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } catch (NullPointerException ex) {
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("{chId}/streams/{streamId}/queue2fps")
-    public int getQueue2Fps(@PathVariable("chId") String chId,@PathVariable("streamId") int streamId ){
+    @GetMapping(value = "{chId}/streams/{streamId}/queue2fps", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getQueue2Fps(@PathVariable("chId") String chId,
+                                                 @PathVariable("streamId") int streamId) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(chId);
-        if (ch!=null){
-            return (int)ch.videoStreamList.get(streamId).grabberFpsQueue2.get();
-        }else{
-            throw new NotFoundException();
+        if (ch != null) {
+            String responseValue = Long.toString(ch.videoStreamList.get(streamId).grabberFpsQueue2.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @PutMapping("{chId}/streams/{streamId}/queue2fps")
-    public void setQueue2Fps(@RequestBody ReqIntValue value, @PathVariable("chId") String chId,@PathVariable("streamId") int streamId ){
+    @PutMapping(value = "{chId}/streams/{streamId}/queue2fps", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setQueue2Fps(@RequestBody RecValue value,
+                                                 @PathVariable("chId") String chId,
+                                                 @PathVariable("streamId") int streamId) {
         try {
             ChannelsLoader.channelsContainer.channels.get(chId)
-                    .videoStreamList.get(streamId).grabberFpsQueue2.set(value.getValue());
+                    .videoStreamList.get(streamId).grabberFpsQueue2.set(Integer.valueOf(value.getValue()));
             ChannelsLoader.channelsContainer.channels.get(chId)
                     .videoStreamList.get(streamId).refrashStream.set(true);
+            String responseValue = Long.toString(ChannelsLoader.channelsContainer.channels.get(chId)
+                    .videoStreamList.get(streamId).grabberFpsQueue2.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } catch (NullPointerException ex) {
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("{chId}/streams/{streamId}/stream_id")
-    public int getStreamId(@PathVariable("chId") String chId,@PathVariable("streamId") int streamId ){
+    @GetMapping(value = "{chId}/streams/{streamId}/stream_id", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getStreamId(@PathVariable("chId") String chId,
+                                                @PathVariable("streamId") int streamId) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(chId);
-        if (ch!=null){
-            return ch.videoStreamList.get(streamId).id;
-        }else{
-            throw new NotFoundException();
+        if (ch != null) {
+            String responseValue = Integer.toString(ch.videoStreamList.get(streamId).id);
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "{chId}/streams/{streamId}/running", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getStreamRunning(@PathVariable("chId") String chId,
+                                                @PathVariable("streamId") int streamId) {
+        Channel ch = ChannelsLoader.channelsContainer.channels.get(chId);
+        if (ch != null) {
+            String responseValue = Boolean.toString(ch.videoStreamList.get(streamId).running.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 }

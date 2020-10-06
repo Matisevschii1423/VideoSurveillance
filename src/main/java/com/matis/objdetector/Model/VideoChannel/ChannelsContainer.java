@@ -137,7 +137,7 @@ public class ChannelsContainer {
                     ch.videoStreamList.get(j).outputUrl = "rtp://192.168.0.48:" + (5000 + ch.videoStreamList.get(j).id) + "?pkt_size=1300";
                 }
                 if (j==1){
-                    ch.videoStreamList.get(j).inputUrl = "rtsp://admin:galaxymini111@192.168.0.100:554/live/sub";
+                    ch.videoStreamList.get(j).inputUrl = "rtsp://admin:galaxymini111@192.168.0.100:554/live/subm,";
                     ch.videoStreamList.get(j).outputUrl = "rtp://192.168.0.48:" + (5000 + ch.videoStreamList.get(j).id) + "?pkt_size=1300";
                 }
                 if (j == 0) {

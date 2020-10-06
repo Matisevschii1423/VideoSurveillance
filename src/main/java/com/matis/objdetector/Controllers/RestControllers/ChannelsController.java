@@ -1,12 +1,11 @@
 package com.matis.objdetector.Controllers.RestControllers;
 
-import com.matis.objdetector.Controllers.Exceptions.NotFoundException;
-import com.matis.objdetector.Controllers.Helpers.ReqBoolValue;
-import com.matis.objdetector.Controllers.Helpers.ReqStringValue;
-import com.matis.objdetector.Controllers.Helpers.Succes;
+import com.matis.objdetector.Controllers.Helpers.ResValue;
+import com.matis.objdetector.Controllers.Helpers.RecValue;
 import com.matis.objdetector.Model.ChannelsLoader;
 import com.matis.objdetector.Model.VideoChannel.Channel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,69 +16,73 @@ import java.util.Set;
 @RequestMapping("channels")
 public class ChannelsController {
     @GetMapping
-    public ResponseEntity<HashMap<String,String>> allChannels(){
+    public ResponseEntity<ResValue> allChannels(){
         Set<String> keys = ChannelsLoader.channelsContainer.channels.keySet();
         HashMap<String,String> channelsName = new HashMap<>();
         for (String key:keys){
             channelsName.put(key,ChannelsLoader.channelsContainer.channels.get(key).name);
         }
         if (channelsName.size()!=0){
-            return new ResponseEntity<>(channelsName, HttpStatus.OK);
+            String responseValue = channelsName.toString();
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         }else{
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("{id}/enable")
-    public ResponseEntity<ReqBoolValue> getEnable(@PathVariable String id){
+    @GetMapping(value = "{id}/enable",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getEnable(@PathVariable String id){
         Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
         if (ch!= null){
-            return new ResponseEntity<>(new ReqBoolValue(ch.enableChannel.get()),HttpStatus.OK);
+            String responseValue = Boolean.toString(ch.enableChannel.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         }else{
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
     //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
-    @PutMapping("{id}/enable")
-    public ResponseEntity<Succes> setEnable(@RequestBody ReqBoolValue value,@PathVariable String id){
+    @PutMapping(value = "{id}/enable",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setEnable(@RequestBody RecValue value, @PathVariable String id){
         System.out.println("Ch-"+id+"-"+value.getValue());
         try{
-            ChannelsLoader.channelsContainer.channels.get(id).enableChannel.set(value.getValue());
-            return new ResponseEntity<>(new Succes(true),HttpStatus.OK);
+            ChannelsLoader.channelsContainer.channels.get(id).enableChannel.set(Boolean.valueOf(value.getValue()));
+            String responseValue = Boolean.toString(ChannelsLoader.channelsContainer.channels.get(id).enableChannel.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         }catch (NullPointerException ex){
-            return new ResponseEntity<>(new Succes(false),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("{id}/name")
-    public ResponseEntity<HashMap<String, String>> getName(@PathVariable String id){
+    @GetMapping(value = "{id}/name",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getName(@PathVariable String id){
         Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
         if (ch!= null){
-            HashMap<String,String> result = new HashMap<String,String>(){{put(id,ch.name);}};
-            return new ResponseEntity<>(result,HttpStatus.OK);
+            String responseValue = ch.name;
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         }else{
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
     //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
-    @PutMapping("{id}/name")
-    public ResponseEntity<Succes> setName(@RequestBody ReqStringValue value, @PathVariable String id){
-        System.out.println("received name is -->" + value);
+    @PutMapping(value = "{id}/name",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setName(@RequestBody RecValue value, @PathVariable String id){
         try{
             ChannelsLoader.channelsContainer.channels.get(id).name=value.getValue();
-            return new ResponseEntity<>(new Succes(true),HttpStatus.OK);
+            String responseValue = ChannelsLoader.channelsContainer.channels.get(id).name;
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         }catch (NullPointerException ex){
-            return new ResponseEntity<>(new Succes(false),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.OK);
         }
     }
 
-    @GetMapping("{id}/number")
-    public Integer getNumber(@PathVariable String id){
+    @GetMapping(value = "{id}/number",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getNumber(@PathVariable String id){
         Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
         if (ch!= null){
-            return ch.number.get();
+            String responseValue = Integer.toString(ch.number.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         }else{
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
         }
     }
 

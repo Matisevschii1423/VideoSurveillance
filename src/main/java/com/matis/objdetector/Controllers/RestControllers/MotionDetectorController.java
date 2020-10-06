@@ -1,13 +1,11 @@
 package com.matis.objdetector.Controllers.RestControllers;
 
 import com.matis.objdetector.Controllers.Exceptions.NotFoundException;
-import com.matis.objdetector.Controllers.Helpers.ReqBoolValue;
-import com.matis.objdetector.Controllers.Helpers.ReqIntValue;
-import com.matis.objdetector.Controllers.Helpers.ReqStringValue;
-import com.matis.objdetector.Controllers.Helpers.Succes;
+import com.matis.objdetector.Controllers.Helpers.*;
 import com.matis.objdetector.Model.ChannelsLoader;
 import com.matis.objdetector.Model.VideoChannel.Channel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("channels")
 public class MotionDetectorController {
 
-    @GetMapping("{id}/mdetector/enable")
-    public boolean getEnable(@PathVariable String id) {
+    @GetMapping(value = "{id}/mdetector/enable",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getEnable(@PathVariable String id) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
         if (ch != null) {
-            return ch.motionDetector.enableDetector.get();
+            String responseValue = Boolean.toString(ch.motionDetector.enableDetector.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } else {
             throw new NotFoundException();
         }
@@ -27,94 +26,99 @@ public class MotionDetectorController {
     }
 
     //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
-    @PutMapping("{id}/mdetector/enable")
-    public ResponseEntity<Succes> setEnable(@RequestBody ReqBoolValue value, @PathVariable String id) {
-        System.out.println(id +"----"+value.getValue());
+    @PutMapping(value = "{id}/mdetector/enable",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setEnable(@RequestBody RecValue value, @PathVariable String id) {
+        try {
+            ChannelsLoader.channelsContainer.channels.get(id).motionDetector.enableDetector.set(Boolean.valueOf(value.getValue()));
+            String responseValue = Boolean.toString(ChannelsLoader.channelsContainer.channels.get(id).motionDetector.enableDetector.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } catch (NullPointerException ex) {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "{id}/mdetector/running",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getRunning(@PathVariable String id) {
+        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
+        if (ch != null) {
+            String responseValue = Boolean.toString(ch.motionDetector.running.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
+    @GetMapping(value = "{id}/mdetector/stream_sel",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getStreamSelector(@PathVariable String id) {
+        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
+        if (ch != null) {
+            String responseValue = Integer.toString(ch.motionDetector.streamSelector.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
+    @PutMapping(value = "{id}/mdetector/stream_sel",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setStreamSelector(@RequestBody RecValue value, @PathVariable String id) {
+        try {
+            ChannelsLoader.channelsContainer.channels.get(id).motionDetector.streamSelector.set(Integer.valueOf(value.getValue()));
+            String responseValue = Integer.toString(ChannelsLoader.channelsContainer.channels.get(id).motionDetector.streamSelector.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } catch (NullPointerException ex) {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping(value = "{id}/mdetector/threshold",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getThreshold(@PathVariable String id) {
+        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
+        if (ch != null) {
+            String responseValue = Integer.toString(ch.motionDetector.threshold.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ResValue(false, ""), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
+    @PutMapping(value = "{id}/mdetector/threshold",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setThreshold(@RequestBody RecValue value, @PathVariable String id) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
         try {
-            ChannelsLoader.channelsContainer.channels.get(id).motionDetector.enableDetector.set(value.getValue());
-            return new ResponseEntity<>(new Succes(true), HttpStatus.OK);
+            ChannelsLoader.channelsContainer.channels.get(id).motionDetector.threshold.set(Integer.valueOf(value.getValue()));
+            String responseValue = Integer.toString(ChannelsLoader.channelsContainer.channels.get(id).motionDetector.threshold.get());
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } catch (NullPointerException ex) {
-            return new ResponseEntity<>(new Succes(false), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResValue(true, ""), HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("{id}/mdetector/running")
-    public boolean getRunning(@PathVariable String id) {
+    @GetMapping(value = "{id}/mdetector/zone",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> getZone(@PathVariable String id) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
         if (ch != null) {
-            return ch.motionDetector.running.get();
+            String responseValue = ch.motionDetector.motionZone;
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } else {
-            throw new NotFoundException();
-        }
-    }
-
-
-
-    @GetMapping("{id}/mdetector/stream_sel")
-    public Integer getStreamSelector(@PathVariable String id) {
-        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
-        if (ch != null) {
-            return ch.motionDetector.streamSelector.get();
-        } else {
-            throw new NotFoundException();
+            return new ResponseEntity<>(new ResValue(true, ""), HttpStatus.NOT_FOUND);
         }
     }
 
     //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
-    @PutMapping("{id}/mdetector/stream_sel")
-    public ResponseEntity<Succes> setStreamSelector(@RequestBody ReqIntValue value, @PathVariable String id) {
-        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
-        try {
-            ChannelsLoader.channelsContainer.channels.get(id).motionDetector.streamSelector.set(value.getValue());
-            return new ResponseEntity<>(new Succes(true), HttpStatus.OK);
-        } catch (NullPointerException ex) {
-            return new ResponseEntity<>(new Succes(false), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("{id}/mdetector/threshold")
-    public Integer getThreshold(@PathVariable String id) {
-        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
-        if (ch != null) {
-            return ch.motionDetector.threshold.get();
-        } else {
-            throw new NotFoundException();
-        }
-    }
-
-    //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
-    @PutMapping("{id}/mdetector/threshold")
-    public ResponseEntity<Succes> setThreshold(@RequestBody ReqIntValue value, @PathVariable String id) {
-        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
-        try {
-            ChannelsLoader.channelsContainer.channels.get(id).motionDetector.threshold.set(value.getValue());
-            return new ResponseEntity<>(new Succes(true), HttpStatus.OK);
-        } catch (NullPointerException ex) {
-            return new ResponseEntity<>(new Succes(false), HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("{id}/mdetector/zone")
-    public String getZone(@PathVariable String id) {
-        Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
-        if (ch != null) {
-            return ch.motionDetector.motionZone;
-        } else {
-            throw new NotFoundException();
-        }
-    }
-
-    //fetch('/channels/8OhaeAVs/name'. { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({text: 'channnnneeeeelll'})}). then(console. log)
-    @PutMapping("{id}/mdetector/zone")
-    public ResponseEntity<Succes> setZone(@RequestBody ReqStringValue value, @PathVariable String id) {
+    @PutMapping(value = "{id}/mdetector/zone",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResValue> setZone(@RequestBody RecValue value, @PathVariable String id) {
         Channel ch = ChannelsLoader.channelsContainer.channels.get(id);
         try {
             ChannelsLoader.channelsContainer.channels.get(id).motionDetector.motionZone=value.getValue();
             ChannelsLoader.channelsContainer.channels.get(id).motionDetector.refreshDetector.set(true);
-            return new ResponseEntity<>(new Succes(true), HttpStatus.OK);
+            String responseValue = ChannelsLoader.channelsContainer.channels.get(id).motionDetector.motionZone;
+            return new ResponseEntity<>(new ResValue(true, responseValue), HttpStatus.OK);
         } catch (NullPointerException ex) {
-            return new ResponseEntity<>(new Succes(false), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ResValue(true, ""), HttpStatus.NOT_FOUND);
         }
     }
 

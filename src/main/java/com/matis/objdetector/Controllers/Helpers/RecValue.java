@@ -1,10 +1,9 @@
 package com.matis.objdetector.Controllers.Helpers;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 
-public class ReqStringValue {
-
-    @JsonProperty("value")
+@Component
+public class RecValue {
     private String value;
 
     public String getValue() {

@@ -29,13 +29,10 @@
         <!-- Links -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/channels">Channels</a>
+                <a class="nav-link" href="/motion_det">Motion det.</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/streams">Streams</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Parameters</a>
+                <a class="nav-link" href="/ch_param">Parameters</a>
             </li>
         </ul>
         <!-- Links -->
@@ -48,55 +45,53 @@
 
 
 <div class="container-fluid">
-    <div class="row m-0">
-        <!--Col 1-->
-        <div class="col-12">
-            <div class="row">
-                <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 p-2 ">
-                    <div class="bg-dark rounded p-2">
-                        <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                            <a class="nav-link text-light btn-outline-secondary mb-1 active" style="hover:disabled;" id="ch_1_link" data-toggle="pill" href="#ch_1" role="tab" aria-controls="ch_1" aria-selected="true">Channel_1</a>
-                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_2_link" data-toggle="pill" href="#ch_2" role="tab" aria-controls="ch_2" aria-selected="false">Channel_2</a>
-                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_3_link" data-toggle="pill" href="#ch_3" role="tab" aria-controls="ch_3" aria-selected="false">Channel_3</a>
-                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_4_link" data-toggle="pill" href="#ch_4" role="tab" aria-controls="ch_4" aria-selected="false">Channel_4</a>
-                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_5_link" data-toggle="pill" href="#ch_5" role="tab" aria-controls="ch_4" aria-selected="false">Channel_5</a>
-                            <a class="nav-link text-light btn-outline-secondary mb-1" id="ch_6_link" data-toggle="pill" href="#ch_6" role="tab" aria-controls="ch_4" aria-selected="false">Channel_6</a>
+    <div class="row p-2 m-0">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 p-2 bg-dark rounded" id="ch_selector">
+            <button th:each="channel: ${channels}" th:value="${channel.id}" th:text="${channel.name}" type="button" href="/channels/" class="btn btn-secondary btn-lg btn-block" aria-pressed="false">
+            </button>
+        </div>
+        <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
+            <div class="row p-2 m-0 bg-dark rounded">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
+                    <div class="bg-secondary rounded ">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video id="video_player" class="video-fluid embed-responsive-item" value="" href="/number" autoplay loop muted playsinline allowfullscreen ></video>
+                        </div>
+                    </div>
+                    <div class="mt-1 ml-1">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="stream_selector"  value="">
+                            <label class="form-check-label text-light" >Stream 1</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="stream_selector" value="" checked>
+                            <label class="form-check-label text-light" >Stream 2</label>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12 p-2">
-                    <div class="bg-dark rounded p-2">
-                        <div class="tab-content" id="v-pills-tabContent">
-                            <div class="tab-pane fade show active" id="ch_1" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <div class="bg-secondary rounded">
-                                            <div class="embed-responsive embed-responsive-16by9">
-                                                <video id="video_player" class="video-fluid embed-responsive-item" value="" href="/number" autoplay loop muted playsinline allowfullscreen ></video>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-9">
-                                        <form>
-                                            <div class="form-group">
-                                                <label class="text-light" for="stream_1_input">Stream 1</label>
-                                                <input type="text" class="form-control" id="stream_1_input" >
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="text-light" for="stream_2_input">Stream 2</label>
-                                                <input type="text" class="form-control" id="stream_2_input" >
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="ch_2" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_2</div>
-                            <div class="tab-pane fade" id="ch_3" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_3</div>
-                            <div class="tab-pane fade" id="ch_4" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_4</div>
-                            <div class="tab-pane fade" id="ch_5" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_5</div>
-                            <div class="tab-pane fade" id="ch_6" role="tabpanel" aria-labelledby="v-pills-profile-tab">Channel_6</div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                    <form>
+                        <div class="form-group">
+                            <label class="text-light" >Channel name <span id="ch_name_span" class="badge"></span> </label>
+                            <input type="text" class="form-control" placeholder="Enter channel name" id="ch_name" value="">
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <div class="mb-2">
+                                <button type="button" class="btn btn-secondary" id="enable_input_stream_1" value="">UNKNOWN</button>
+                                <label class="text-light mr-2" >Stream 1 <span id="stream_1_span" class="badge"></span></label>
+                                <label class="mr-2" id="state_stream_1"></label>
+                            </div>
+                            <input type="text" class="form-control" placeholder="RTSP Link ( Stream 1 )" id="input_stream_1" value="">
+                        </div>
+                        <div class="form-group">
+                            <div class="mb-2">
+                                <button type="button" class="btn btn-secondary" id="enable_input_stream_2" value="">UNKNOWN</button>
+                                <label class="text-light mr-2" >Stream 2 <span id="stream_2_span" class="badge"></span></label>
+                                <label class="mr-2" id="state_stream_2"></label>
+                            </div>
+                            <input type="text" class="form-control" placeholder="RTSP Link ( Stream 2 )" id="input_stream_2" value="">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -110,5 +105,6 @@
 <script src="libs/js/adapter.min.js"></script>
 <script src="libs/js/web_socket.min.js"></script>
 <script src="libs/js/janus.js"></script>
+<script src="scripts/ch_param.js"></script>
 </body>
 </html>
