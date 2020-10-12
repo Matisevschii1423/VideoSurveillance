@@ -4,14 +4,14 @@ var selectedStream = null;
 var janus = null;
 var streaming = null;
 var bitrateTimer = null;
-var stream = null;
+//var stream = null;
 var opaqueId = "raztot-" + Janus.randomString(12);
 var simulcastStarted = false, svcStarted = false;
 
 function startJanus(callback) {
     if (streaming != null) {
         Janus.log("Plugin attached! (" + streaming.getPlugin() + ", id=" + streaming.getId() + ")");
-        startStream();
+        //startStream();
 
         typeof callback === 'function' && callback(true);
         return;
@@ -32,7 +32,7 @@ function startJanus(callback) {
                         success: function (pluginHandle) {
                             streaming = pluginHandle;
                             Janus.log("Plugin attached! (" + streaming.getPlugin() + ", id=" + streaming.getId() + ")");
-                            startStream();
+                            //startStream();
                             $('#start-stream').click(function () {
                                 $(this).attr('disabled', true);
 
@@ -177,91 +177,177 @@ function stopStream() {
     }
 }
 
-function sendData(url,data,label){
+function sendData(url,value,onSucces,onError){
     $.ajax({
         type: 'PUT',
         url: url,
-        async:false,
-        data: JSON.stringify({"value":data}),
+        async:true,
+        data: value,
         dataType: 'json',
         contentType: 'application/json',
-        success: function(data){
-            if (data.succes == true){
-                label.html((label.text()+' <span class="badge badge-success">ok</span>'));
-            }else{
-                label.html((label.text()+' <span class="badge badge-danger">error</span>'));
-            }
-        ;},
-        error: function(data){
-            label.html((label.text()+' <span class="badge badge-danger">error</span>'));
-        ;}
+        success:function(data){onSucces(data);},
+        error: function(data){onError(data);}
     });
 }
 
-function getData(url){
-    var tmp;
+function getData(url,onSucces,onError){
+    console.log(url);
     $.ajax({
         type: 'GET',
         url: url,
-        async:false,
+        async:true,
         dataType: 'json',
         contentType: 'application/json',
-        success: function(data){
-        tmp = data;},
-        error:function(){tmp = null;}
+        success:function(data){onSucces(data);},
+        error:function(data){onError(data);}
     });
-    return tmp;
+}
+
+function waitMotionEvent(){
+    var md_zone_state = $('#md_zone_state')
+    var ch_id = $('#ch_id');
+    var url = ch_id.attr('href')+ch_id.attr('value')+"/mdetector/md_in_img";
+    $.ajax({
+        type: 'GET',
+        url: url,
+        async:true,
+        dataType: 'json',
+        contentType: 'application/json',
+        timeout: 3000,
+        success:
+            function(data){
+                if (data.succes==true){
+                    if (eval(data.value)==true){
+                        md_zone_state.show();
+                        setTimeout(function(){waitMotionEvent();},1000);
+                        //console.log(url+"<-GET<-"+data.value);
+                    }else{
+                        md_zone_state.hide();
+                        setTimeout(function(){waitMotionEvent();},1000)
+                        //console.log(url+"<-GET<-"+data.value);
+                    }
+                }else{
+                    md_zone_state.hide();
+                    setTimeout(function(){waitMotionEvent();},1000);
+                    //console.log(url+"<-GET<-"+data.value);
+                }
+            },
+        error:
+            function(data){
+                md_zone_state.hide();
+                setTimeout(function(){waitMotionEvent();},1000);
+                //console.log(url+"<-GET<-"+data.value);
+            }
+    });
 }
 
 function reqEnable(){
     var ch_id = $('#ch_id');
     var label = $('#md_enable');
+    var span = $('#md_enable_span');
     var url = ch_id.attr('href')+ch_id.attr('value')+label.attr('href');
-    var result = getData(url);
-    switch(result) {
-      case true:
-        label.html(('Enabled'+' <span class="badge badge-success">ok</span>'));
-        break;
-      case false:
-        label.html(('Disabled'+' <span class="badge badge-success">ok</span>'));
-        break;
-      case null:
-        label.html(('UNKNOWN'+' <span class="badge badge-danger">error</span>'));
-        break;
-      default:
-        label.html(('UNKNOWN'+' <span class="badge badge-danger">error</span>'));
-    }
+    getData(url,
+        function(data){
+            if (data.succes == true){
+                if (eval(data.value) == true){
+                    label.text('Enabled');
+                    label.attr('value',true);
+                }
+                if (eval(data.value) == false){
+                    label.text('Disabled');
+                    label.attr('value',false);
+                }
+            }else{
+                label.text('UNKNOWN');
+                label.attr('value','');
+            }
+            span.removeClass('badge-danger').addClass('badge-success');
+            span.text('ok');
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"<-GET"+"<--"+data.value);
+        },function(data){
+            label.text('UNKNOWN');
+            label.attr('value','');
+            span.removeClass('badge-success').addClass('badge-danger');
+            span.text('error');
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"<-GET"+"<--"+data.value);
+        }
+    );
 }
 function reqStream(){
     var ch_id = $('#ch_id');
     var label = $('#md_stream');
+    var span = $('#md_stream_span');
     var url = ch_id.attr('href')+ch_id.attr('value')+label.attr('href');
-    var result = getData(url);
-    if(isNaN(result)){
-        label.html(('UNKNOWN' + ' <span class="badge badge-danger">error</span>'));
-    }else{
-        label.html((result + ' <span class="badge badge-success">ok</span>'));
-    }
+    getData(url,
+        function(data){
+            if (data.succes == true){
+                label.text(eval(data.value)+1);
+                label.attr('value',eval(data.value));
+            }else{
+                label.text('UNKNOWN');
+                label.attr('value','');
+            }
+            span.removeClass('badge-danger').addClass('badge-success');
+            span.text('ok');
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"<-GET"+"<--"+data.value);
+        },function(data){
+            label.text('UNKNOWN');
+            label.attr('value','');
+            span.removeClass('badge-success').addClass('badge-danger');
+            span.text('error');
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"<-GET"+"<--"+data.value);
+        }
+    );
 }
 
 function reqThreshold(){
     var ch_id = $('#ch_id');
     var label = $('#md_threshold');
+    var span = $('#md_threshold_span');
     var url = ch_id.attr('href')+ch_id.attr('value')+label.attr('href');
-    var result = getData(url);
-    if(isNaN(result)){
-        label.html(('UNKNOWN' + ' <span class="badge badge-danger">error</span>'));
-    }else{
-        label.html((result + ' <span class="badge badge-success">ok</span>'));
-    }
+    getData(url,
+        function(data){
+            if (data.succes == true){
+                label.text(data.value);
+                label.attr('value',data.value);
+            }else{
+                label.text('UNKNOWN');
+                label.attr('value','');
+            }
+            span.removeClass('badge-danger').addClass('badge-success');
+            span.text('ok');
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"<-GET"+"<--"+data.value);
+        },function(data){
+            label.text('UNKNOWN');
+            label.attr('value','');
+            span.removeClass('badge-success').addClass('badge-danger');
+            span.text('error');
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"<-GET"+"<--"+data.value);
+        }
+    );
 }
 
 function setVideoId(){
     var ch_id = $('#ch_id');
     var video_player = $('#video_player');
     var url = ch_id.attr('href')+ch_id.attr('value')+video_player.attr('href');//request video stream number
-    var result = getData(url);
-    video_player.attr('value',result);
+    getData(url,
+        function(data){
+            if (data.succes == true){
+                video_player.attr('value',data.value);
+            }else{
+                video_player.attr('value',0);
+            }
+        },function(data){
+            video_player.attr('value',0);
+        }
+    );
 }
 
 function initialParams(){
@@ -270,8 +356,6 @@ function initialParams(){
     label.attr('value',$(first_ch).attr('value'));
     label.text($(first_ch).text());
     setVideoId();
-    stopStream();
-    startStream();
 }
 
 function reqAll(){
@@ -283,6 +367,13 @@ function reqAll(){
     stopStream();
     startStream();
 }
+
+function clearSpan(span){
+    span.removeClass('badge-danger');
+    span.removeClass('success');
+    span.text('');
+}
+
 //Channel selector
 $('#ch_dropdown_menu a').on('click',function(){
     var label = $('#ch_id');
@@ -296,42 +387,128 @@ $('#ch_dropdown_menu a').on('click',function(){
 $('#md_enable_dropdown_menu a').on('click',function(){
     var ch_id = $('#ch_id');
     var label = $('#md_enable');
-    label.attr('value',$(this).attr('value'));
-    label.text($(this).text());
+    var span = $('#md_enable_span');
+    //label.attr('value',$(this).attr('value'));
+    //label.text($(this).text());
     var url = ch_id.attr('href')+ch_id.attr('value')+label.attr('href');
-    sendData(url,$(this).attr('value'),label);
+    var dataOut = JSON.stringify({'value':$(this).attr('value')});
+    sendData(url,dataOut,
+        function(data){
+            if (data.succes == true){
+                if (eval(data.value)==true){
+                    label.text('Enabled');
+                    label.attr('value',true)
+                }else{
+                    label.text('Fisabled');
+                    label.attr('value',false)
+                }
+            }else{
+                label.text('UNKNOWN');
+            }
+            span.removeClass('badge-danger').addClass('badge-success');
+            span.text('ok')
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"-PUT->"+"<--"+data.value);
+        },function(data){
+            label.text('UNKNOWN');
+            span.removeClass('badge-success').addClass('badge-danger');
+            span.text('error')
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"-PUT->"+"<--"+data.value);
+        }
+    );
 });
 
 //threshold selector
 $('#md_threshold_dropdown_menu a').on('click',function(){
     var ch_id = $('#ch_id');
     var label = $('#md_threshold');
-    label.attr('value',$(this).attr('value'));
-    label.text($(this).text());
+    var span = $('#md_threshold_span');
+    //label.attr('value',$(this).attr('value'));
+    //label.text($(this).text());
     var url = ch_id.attr('href')+ch_id.attr('value')+label.attr('href');
-    sendData(url,$(this).attr('value'),label);
+    var dataOut = JSON.stringify({'value':$(this).attr('value')});
+    sendData(url,dataOut,
+        function(data){
+            if (data.succes == true){
+                label.text(data.value);
+                label.attr('value',data.value)
+            }else{
+                label.text('UNKNOWN');
+            }
+            span.removeClass('badge-danger').addClass('badge-success');
+            span.text('ok')
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"-PUT->"+"<--"+data.value);
+        },function(data){
+            label.text('UNKNOWN');
+            span.removeClass('badge-success').addClass('badge-danger');
+            span.text('error')
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"-PUT->"+"<--"+data.value);
+        }
+    );
 });
 
 //stream selector
 $('#md_stream_dropdown_menu a').on('click',function(){
     var ch_id = $('#ch_id');
     var label = $('#md_stream');
-    label.attr('value',$(this).attr('value'));
-    label.text($(this).text());
+    var span = $('#md_stream_span');
+    //label.attr('value',$(this).attr('value'));
+    //label.text($(this).text());
     var url = ch_id.attr('href')+ch_id.attr('value')+label.attr('href');
-    sendData(url,$(this).attr('value'),label);
+    var dataOut = JSON.stringify({'value':eval($(this).attr('value'))});
+    sendData(url,dataOut,
+        function(data){
+            if (data.succes == true){
+                label.text(eval(data.value)+1);
+                label.attr('value',eval(data.value))
+            }else{
+                label.text('UNKNOWN');
+                label.attr('value','0')
+            }
+            span.removeClass('badge-danger').addClass('badge-success');
+            span.text('ok')
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"-PUT->"+"<--"+data.value);
+        },function(data){
+            label.text('UNKNOWN');
+            label.attr('value','0')
+            span.removeClass('badge-success').addClass('badge-danger');
+            span.text('error')
+            setTimeout(function(){clearSpan(span);},3000);
+            console.log(url+"-PUT->"+"<--"+data.value);
+        }
+    );
 });
+
+$('#video_div').on('click',function () {video_div
+    if($('#video_player').get(0).paused){
+        $('#video_player').get(0).play();
+        startStream();
+        $('#pause_icon').fadeOut();
+    }else{
+       $('#video_player').get(0).pause();
+       stopStream();
+       $('#pause_icon').fadeIn();
+    }
+});
+
 $('#stream_1').click(function() {
     stopStream();
-    startStream();
+    $('#video_player').get(0).pause();
+    $('#pause_icon').fadeIn();
 });
 $('#stream_2').click(function() {
   stopStream();
-  startStream();
+  $('#video_player').get(0).pause();
+  $('#pause_icon').fadeIn();
 });
 
 $(document).ready(function(){
     initialParams();
     reqAll();
     startJanus();
+    waitMotionEvent();
 });

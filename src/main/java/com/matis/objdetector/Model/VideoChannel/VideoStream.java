@@ -75,6 +75,13 @@ public class VideoStream implements Externalizable, Runnable {
         this.executorService = Executors.newSingleThreadScheduledExecutor();
     }
 
+    public LinkedBlockingQueue getQueue1(){
+        return this.bufferedImagesQueue1;
+    }
+    public LinkedBlockingQueue getQueue2(){
+        return this.bufferedImagesQueue2;
+    }
+
 
     private FrameConsumer createFrameConsumer(LinkedBlockingQueue<BufferedImage> bufferedImagesQueue) {
         FrameConsumer frameConsumer = new FrameConsumer() {
@@ -93,6 +100,7 @@ public class VideoStream implements Externalizable, Runnable {
                         if (bufferedImagesQueue.size() > 8) {
                             bufferedImagesQueue.remove();
                         }
+                        //logger.info(parrentId +"-"+id+"-"+bufferedImagesQueue.size());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

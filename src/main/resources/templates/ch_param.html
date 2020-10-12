@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <head>
-        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <link rel="stylesheet" type="text/css" href="css/video_player.css">
         <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.5.2/css/bootstrap.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Title of the document</title>
     </head>
 </head>
-<body class="bg-secondary">
+<body style="background-color: #7b9294">
 
 
 <!--Navbar-->
@@ -29,6 +29,9 @@
         <!-- Links -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
+                <a class="nav-link" href="/main_view">Main view</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="/motion_det">Motion det.</a>
             </li>
             <li class="nav-item">
@@ -46,26 +49,27 @@
 
 <div class="container-fluid">
     <div class="row p-2 m-0">
-        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 p-2 bg-dark rounded" id="ch_selector">
+        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 p-2 mb-2 bg-dark rounded" id="ch_selector">
             <button th:each="channel: ${channels}" th:value="${channel.id}" th:text="${channel.name}" type="button" href="/channels/" class="btn btn-secondary btn-lg btn-block" aria-pressed="false">
             </button>
         </div>
         <div class="col-xl-9 col-lg-9 col-md-12 col-sm-12">
             <div class="row p-2 m-0 bg-dark rounded">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 align-self-center">
-                    <div class="bg-secondary rounded ">
+                    <div class="bg-secondary rounded" id="video_div">
                         <div class="embed-responsive embed-responsive-16by9">
                             <video id="video_player" class="video-fluid embed-responsive-item" value="" href="/number" autoplay loop muted playsinline allowfullscreen ></video>
+                            <div class="playpause" id="pause_icon"></div>
                         </div>
                     </div>
                     <div class="mt-1 ml-1">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="stream_selector"  value="">
-                            <label class="form-check-label text-light" >Stream 1</label>
+                            <input class="form-check-input" type="radio" name="stream_selector" id="stream_1" >
+                            <label class="form-check-label text-light h6" >Stream 1</label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="stream_selector" value="" checked>
-                            <label class="form-check-label text-light" >Stream 2</label>
+                            <input class="form-check-input" type="radio" name="stream_selector" id="stream_2" checked>
+                            <label class="form-check-label text-light h6" >Stream 2</label>
                         </div>
                     </div>
                 </div>
@@ -101,7 +105,6 @@
 <script src="webjars/jquery/3.5.1/jquery.min.js"></script>
 <script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
 <script src="webjars/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="webjars/popper.js/1.16.1/dist/umd/popper.min.js"></script>
 <script src="libs/js/adapter.min.js"></script>
 <script src="libs/js/web_socket.min.js"></script>
 <script src="libs/js/janus.js"></script>

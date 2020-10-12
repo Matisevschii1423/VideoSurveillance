@@ -7,14 +7,15 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
-public class MotionDetector implements Serializable, Runnable {
+public class MotionDetector implements Externalizable, Runnable {
 
     private Logger logger = LoggerFactory.getLogger(MotionDetector.class);
 
@@ -25,6 +26,8 @@ public class MotionDetector implements Serializable, Runnable {
     public String motionZone;
     public String parrentId;
     public transient AtomicBoolean refreshDetector;
+    public transient AtomicBoolean motionInImage;
+    public List<VideoStream> videoStreamList;
 
     /*** detector state*/
     public transient AtomicBoolean running;
@@ -38,18 +41,31 @@ public class MotionDetector implements Serializable, Runnable {
     private transient Mat image;
     private transient Size blurKsize;
     private transient List<MatOfPoint> contours;
-    private List<VideoStream> videoStreamList;
+
+    public MotionDetector() {
+        this.enableDetector = new AtomicBoolean(false);
+        this.threshold = new AtomicInteger(5);
+        this.streamSelector = new AtomicInteger(1);
+        this.refreshDetector = new AtomicBoolean(false);
+        this.running = new AtomicBoolean(false);
+        this.motionZone = this.createDefaultMdZone();
+        this.videoStreamList = new ArrayList<>();
+        this.matZone = createMaskMat(this.motionZone);
+        this.motionInImage = new AtomicBoolean(false);
+    }
 
     public MotionDetector(List<VideoStream> videoStreamList) {
         this.enableDetector = new AtomicBoolean(false);
         this.threshold = new AtomicInteger(5);
-        this.streamSelector = new AtomicInteger(2);
+        this.streamSelector = new AtomicInteger(1);
         this.refreshDetector = new AtomicBoolean(false);
         this.running = new AtomicBoolean(false);
         this.motionZone = this.createDefaultMdZone();
         this.videoStreamList = videoStreamList;
         this.matZone = createMaskMat(this.motionZone);
+        this.motionInImage = new AtomicBoolean(false);
     }
+
 
     private Mat createMaskMat(String mask) {
         String[] rows = new String[32];
@@ -127,7 +143,11 @@ public class MotionDetector implements Serializable, Runnable {
 
                 Imgproc.findContours(this.diffImage, this.contours, this.hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
                 if (contours.size() > 0) {
-
+                    this.motionInImage.set(true);
+                    //logger.info(String.valueOf(this.motionInImage.get()));
+                }else{
+                    this.motionInImage.set(false);
+                    //logger.info(String.valueOf(this.motionInImage.get()));
                 }
                 //canvasFrame.showImage(converter.convert(diffImage));
             }
@@ -173,29 +193,57 @@ public class MotionDetector implements Serializable, Runnable {
         return maskZOne;
     }
 
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException {
+        /*** stream1 parameters */
+        out.writeObject(this.enableDetector);
+        out.writeObject(this.threshold);
+        out.writeObject(this.streamSelector);
+        out.writeObject(this.motionZone);
+        out.writeObject(this.parrentId);
+        out.writeObject(this.videoStreamList);
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+        /*** stream parameters */
+        this.enableDetector = (AtomicBoolean) in.readObject();
+        this.threshold = (AtomicInteger) in.readObject();
+        this.streamSelector = (AtomicInteger) in.readObject();
+        this.motionZone = (String) in.readObject();
+        this.parrentId = (String) in.readObject();
+        this.videoStreamList = (List<VideoStream>) in.readObject();
+    }
+
+
+
     @Override
     public void run() {
-        Thread.currentThread().setName(Thread.currentThread().getName()+"MD");
+        Thread.currentThread().setName(this.parrentId+"-"+this.streamSelector+"-MD");
         BufferedImage image = null;
         this.running.set(true);
         this.refreshDetector.set(false);
-        logger.info("MD started");
+        this.logger.info("MD started");
         while (this.refreshDetector.get() == false && !Thread.currentThread().isInterrupted()) {
             try {
-
-                image = this.videoStreamList.get(this.streamSelector.get()).bufferedImagesQueue1.poll(1l, TimeUnit.SECONDS);
-
+                //logger.info("vSSize-"+this.videoStreamList.size()+"/q0Size"+this.videoStreamList.get(0).getQueue1().size()+"/q1Size"+this.videoStreamList.get(1).getQueue2().size());
+                image = (BufferedImage) this.videoStreamList.get(this.streamSelector.get()).getQueue1().poll(1l, TimeUnit.SECONDS);
+                //logger.info("aaaaaaQ2-"+"---"+this.videoStreamList.get(0).inputUrl);
+                //logger.info(String.valueOf("img is null->"+image == null));
                 if (image != null) {
+                    //logger.info("img not null");
                     if (((DataBufferByte) image.getRaster().getDataBuffer()).getData() != null) {
                         if (this.blurKsize == null) {
                             this.blurKsize = this.calcBlurKernelSize(image.getWidth(), image.getHeight());
                         } else {
+                            //logger.info("find");
                             this.findMotion(image);
                         }
                     }
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.info(e.getMessage());
                 break;
             }
         }

@@ -12,10 +12,10 @@ import java.util.Set;
 
 @Controller
 public class ViewController {
-    @RequestMapping(value = "/main")
+    @RequestMapping(value = "/main_view")
     public ModelAndView mainTemplate(){
 
-        ModelAndView model = new ModelAndView("main");
+        ModelAndView model = new ModelAndView("main_view");
         Set<String> keys = ChannelsLoader.channelsContainer.channels.keySet();
         List<Channel> channels = new ArrayList<>();
         for(String key: keys){

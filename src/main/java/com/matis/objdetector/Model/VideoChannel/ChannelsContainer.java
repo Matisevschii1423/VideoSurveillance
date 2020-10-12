@@ -137,20 +137,23 @@ public class ChannelsContainer {
                     ch.videoStreamList.get(j).outputUrl = "rtp://192.168.0.48:" + (5000 + ch.videoStreamList.get(j).id) + "?pkt_size=1300";
                 }
                 if (j==1){
-                    ch.videoStreamList.get(j).inputUrl = "rtsp://admin:galaxymini111@192.168.0.100:554/live/subm,";
+                    ch.videoStreamList.get(j).inputUrl = "rtsp://admin:galaxymini111@192.168.0.100:554/live/sub";
                     ch.videoStreamList.get(j).outputUrl = "rtp://192.168.0.48:" + (5000 + ch.videoStreamList.get(j).id) + "?pkt_size=1300";
                 }
                 if (j == 0) {
                     ch.videoStreamList.get(j).grabberFpsQueue1.set(5);
                 }
                 if (i == 1) {
-                    ch.enableChannel.set(true);
                     ch.videoStreamList.get(j).enableStream.set(true);
                     ch.videoStreamList.get(j).enableStream.set(true);
                 }
             }
+            ch.enableChannel.set(true);
             logger.info("Channel:[" + "Nr:" + ch.number + ",ID:" + ch.id + ",Name:" + ch.name + "]" + " was generated");
             ch.motionDetector = new MotionDetector(ch.videoStreamList);
+            ch.motionDetector.parrentId = ch.id;
+            ch.motionDetector.enableDetector.set(true);
+            ch.motionDetector.streamSelector.set(1);
             emptyChannels.put(ch.id, ch);
         }
         tempId = new ArrayList<>();

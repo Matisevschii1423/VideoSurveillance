@@ -71,10 +71,7 @@ public class Channel implements Externalizable, Runnable {
         /*** streams parameters */
         out.writeObject(this.videoStreamList);
         /*** motion detector parameters*/
-        out.writeObject(this.motionDetector.streamSelector);
-        out.writeObject(this.motionDetector.motionZone);
-        out.writeObject(this.motionDetector.threshold);
-        out.writeObject(this.motionDetector.enableDetector);
+        out.writeObject(this.motionDetector);
         //[6SBnNelb, RnE3IAPL, 3oXIuKcq, 4bzKX0lA, TX4USBQO, 14HcISeD, 54KqrMJ6, bnpyomNQ]
     }
 
@@ -86,6 +83,8 @@ public class Channel implements Externalizable, Runnable {
         this.enableChannel = (AtomicBoolean) in.readObject();
         /*** stream1 parameters */
         this.videoStreamList = (List) in.readObject();
+        /*** motion detector */
+        this.motionDetector = (MotionDetector)in.readObject();
     }
 
     @Override
